@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HTML Parser</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
-    />
-  </head>
-  <body>
-    <input type="text" id="user-input" />
-    <button id="btn">submit</button>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML Parser</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css" />
+</head>
+
+<body>
+  <div class="html-parser">
+    <div class="input-area">
+      <div class="input-box">
+        <div class="title">
+          &lt; HTML Parser />
+        </div>
+        <textarea name="html-input" id="user-input" cols="30" rows="10"></textarea>
+        <button id="btn">submit</button>
+      </div>
+    </div>
+    <div class="render-area">
+      <canvas style="background-color: gray;"></canvas>
+    </div>
+  </div>
+</body>
+
 </html>
