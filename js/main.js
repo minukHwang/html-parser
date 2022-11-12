@@ -1,66 +1,101 @@
 import "../scss/main.scss";
 
-class Node {
-  constructor({ children, nodeDetail }) {
-    this.children = children;
-    this.nodeDetail = nodeDetail;
-  }
-
-  getID() {
-    return this.attributes["id"];
-  }
-
-  getClasses() {
-    return this.attributes["class"];
-  }
-}
-
-function createText() {
-  return new Node({ children: [], nodeDetail: data });
-}
-
-class HtmlParser {
-  constructor() {
-    this.input = input;
-    this.position = position;
-  }
-
-  // 현재 position에 있는 문자를 반환하는 메소드
-  getCharacter() {
-    return this.input[this.position];
-  }
-
-  // 현재 position에서부터의 문자열들이 파라미터 문자열 str 로 시작하는지 판단하는 메소드
-  isStartWith() {
-    const characterArray = Array.from(str);
-    let currentPosition = this.position;
-
-    return characterArray.every((character) => {
-      return this.input[currentPosition++] === character;
-    });
-  }
-
-  // 현재 position이 input의 끝을 가리키는지 판단하는 메소드
-  isEndOfInput() {
-    return this.position >= this.input.length;
-  }
-}
-
-// 이외 type의 노드들(Element)을 만드는 메소드
-// 추가적으로 attrs(속성), children(자식노드)를 갖는다.
-function createElement() {
-  return new KarlNode({
-    children,
-    nodeDetail: new KarlElement({ tagName: name, attributes: attrs }),
-  });
-}
-
 let submitButton = document.getElementById("btn");
 let userInput = document.getElementById("user-input");
+let tag = [];
 
-const play = () => {
+// 입력받은 데이터 정렬
+const setup = () => {
   let userValue = userInput.value;
-  console.log(userValue);
+  let tagstart = 0;
+  let tagend = 0;
+  for (let i = 0; i < userValue.length; i++) {
+    if (userValue[i] === "<") {
+      tagstart = i;
+    } else if (userValue[i] === ">") {
+      tagend = i;
+      tag.push(userValue.slice(tagstart, tagend + 1));
+    }
+  }
+  console.log(tag);
+};
+
+//tag 추출
+const getTagName = (text) => {
+  let start = 0;
+  let end = 0;
+  let tagname = "";
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === "<") {
+      start = i + 1;
+    } else if (text[i] === " " || text[i] === ">") {
+      end = i;
+      tagname = text.slice(start, end);
+      break;
+    }
+  }
+  return tagname;
+};
+
+// 어트리뷰트 이름 추출
+const getAttributeName = (text) => {
+  let attrstart = 0;
+  let attrend = 0;
+  let namestart = 0;
+  let nameend = 0;
+  let attrs = [];
+  let attribute = "";
+  let attributeName = "";
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === " ") {
+      namestart = i + 1;
+    } else if (text[i] === "=") {
+      nameend = i;
+      attributeName = text.slice(namestart, nameend);
+    }
+
+    if (text[i] === '"' && text[i - 1] === "=") {
+      attrstart = i + 1;
+    } else if (
+      text[i] === '"' &&
+      (text[i + 1] === " " || text[i + 1] === ">")
+    ) {
+      attrend = i;
+      attribute = text.slice(attrstart, attrend);
+      attrs.push({
+        attributeName: attributeName,
+        attribute: attribute,
+      });
+    }
+  }
+  return attrs;
+};
+
+//오픈인지 닫는 태그인지 판별
+const isTagClosed = (text) => {
+  if (text[1] === "/") {
+    return true;
+  } else if (text[text.length - 2] === "/") {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+//노드 연결
+const setNode = () => {};
+
+//클릭 이벤트
+const play = () => {
+  setup();
+  setNode();
+  let tagname = getTagName(tag[0]);
+  console.log(tagname);
+  let attr = getAttributeName(tag[0]);
+  console.log(attr);
+  let isClosed = isTagClosed(tag[0]);
+  console.log(isClosed);
 };
 
 submitButton.addEventListener("click", play);
